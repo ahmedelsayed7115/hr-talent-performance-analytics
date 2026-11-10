@@ -1,0 +1,128 @@
+{
+    "workforce_summary": {
+        "total_employees": 1470,
+        "active_employees": 1233,
+        "departed_employees": 237,
+        "attrition_rate_pct": 16.12
+    },
+    "financial_impact": {
+        "total_turnover_replacement_cost_usd": 12327384.0,
+        "regrettable_turnover_cost_usd": 6458949.0,
+        "non_regrettable_turnover_cost_usd": 5868435.0,
+        "regrettable_departures_count": 87,
+        "non_regrettable_departures_count": 150,
+        "regrettable_headcount_share_pct": 36.71,
+        "regrettable_cost_share_pct": 52.4,
+        "immediate_flight_risk_exposure_usd": 15780.0,
+        "watchlist_flight_risk_exposure_usd": 669000.0,
+        "top_talent_combined_risk_exposure_usd": 684780.0,
+        "department_turnover_cost_usd": {
+            "Research & Development": {
+                "departed_count": 133,
+                "replacement_cost_usd": 5992791.0,
+                "cost_share_pct": 48.61
+            },
+            "Sales": {
+                "departed_count": 92,
+                "replacement_cost_usd": 5859558.0,
+                "cost_share_pct": 47.53
+            },
+            "Human Resources": {
+                "departed_count": 12,
+                "replacement_cost_usd": 475035.0,
+                "cost_share_pct": 3.85
+            }
+        }
+    },
+    "talent_matrix_status": {
+        "critical_retention_targets_count": 1,
+        "high_potential_watchlist_count": 14,
+        "at_risk_top_talent_combined_count": 15,
+        "stable_future_leaders_count": 174,
+        "underpaid_high_performers_count": 30,
+        "underpaid_avg_compa_ratio": 0.745,
+        "underpaid_replacement_exposure_usd": 1577340.0,
+        "recalibration_budget_required_usd": 400968.0,
+        "recalibration_roi_multiple": 3.93,
+        "model_roc_auc": 0.814,
+        "logistic_regression_baseline_roc_auc": 0.837,
+        "nine_box_active_counts": {
+            "1. TOP TALENT AT CRITICAL RISK (Emergency Intervention)": 1,
+            "2. HIGH POTENTIAL - RETENTION WATCH (Career Growth)": 14,
+            "3. FUTURE ENTERPRISE LEADERS (Secure Top Talent)": 174,
+            "4. CORE CONTRIBUTOR BURNOUT RISK (Workload/Pay Review)": 9,
+            "5. STEADY WORKFORCE CONTRIBUTORS (Engagement Focus)": 84,
+            "6. TRUSTED BEDROCK PERFORMERS (Stable Core)": 951
+        }
+    },
+    "pay_for_performance_audit": {
+        "3": {
+            "Headcount": 1244,
+            "ActiveHeadcount": 1044,
+            "DepartedHeadcount": 200,
+            "AvgMonthlyIncome": 6537.27,
+            "MedianMonthlyIncome": 4965.5,
+            "AvgSalaryHike": 14.0,
+            "MedianSalaryHike": 14.0,
+            "AvgCompaRatio": 1.03,
+            "AvgStockOption": 0.79,
+            "AttritionRate": 0.1608,
+            "AttritionRatePct": 16.08
+        },
+        "4": {
+            "Headcount": 226,
+            "ActiveHeadcount": 189,
+            "DepartedHeadcount": 37,
+            "AvgMonthlyIncome": 6313.89,
+            "MedianMonthlyIncome": 4777.0,
+            "AvgSalaryHike": 21.85,
+            "MedianSalaryHike": 22.0,
+            "AvgCompaRatio": 1.01,
+            "AvgStockOption": 0.8,
+            "AttritionRate": 0.1637,
+            "AttritionRatePct": 16.37
+        }
+    },
+    "top_attrition_drivers": [
+        {
+            "Feature": "BurnoutIndex",
+            "Importance": 0.11390347979625046
+        },
+        {
+            "Feature": "MonthlyIncome",
+            "Importance": 0.09200507803334508
+        },
+        {
+            "Feature": "TotalWorkingYears",
+            "Importance": 0.08709179920649968
+        },
+        {
+            "Feature": "Age",
+            "Importance": 0.07363490793236542
+        },
+        {
+            "Feature": "YearsAtCompany",
+            "Importance": 0.05339735362362532
+        },
+        {
+            "Feature": "OverTime_Yes",
+            "Importance": 0.046349834512018434
+        },
+        {
+            "Feature": "CompaRatio",
+            "Importance": 0.045704395487995625
+        },
+        {
+            "Feature": "YearsWithCurrManager",
+            "Importance": 0.0360254993863548
+        },
+        {
+            "Feature": "DistanceFromHome",
+            "Importance": 0.035035188024373214
+        },
+        {
+            "Feature": "NumCompaniesWorked",
+            "Importance": 0.0325833117759361
+        }
+    ]
+}
