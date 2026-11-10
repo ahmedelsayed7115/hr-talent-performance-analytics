@@ -1,7 +1,7 @@
 # Enterprise HR Performance & Talent Intelligence Suite
 
-[![Power BI](https://img.shields.io/badge/Power_BI-Desktop_2026-F2C811?logo=powerbi&logoColor=black)](file:///d:/ME/port/hr/HR_Executive_Dashboard_v4.pbix)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](file:///d:/ME/port/hr/performance_analytics.py)
+[![Power BI](https://img.shields.io/badge/Power_BI-Desktop_2026-F2C811?logo=powerbi&logoColor=black)](HR_Executive_Dashboard.pbix)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](performance_analytics.py)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.3%2B-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![Status](https://img.shields.io/badge/Status-Executive_Ready-success)]()
 
@@ -11,21 +11,21 @@ Designed to diagnose enterprise attrition drivers, audit pay-for-performance mer
 
 ---
 
-## 📊 Key Deliverables & Repository Structure
+## 📊 Core Deliverables & Repository Structure
 
 ```
-├── HR_Executive_Dashboard_v4.pbix      # Production Power BI Dashboard (3-page HD interactive app)
-├── performance_analytics.py            # Complete end-to-end Python ML & Analytics pipeline
-├── hr_performance_executive_metrics.json# Machine-readable executive scorecard & KPIs
-├── executive_talent_report.md          # Comprehensive CHRO-level strategic memorandum
-├── power_bi_dashboard_blueprint.md     # Production DAX library (24 measures) & layout guide
-├── enriched_hr_performance_data.csv    # Final 1,470-employee dataset with engineered features
-├── WA_Fn-UseC_-HR-Employee-Attrition.csv# Raw IBM HR Analytics benchmark dataset
-├── Model_Feature_Importance.csv        # Permutation feature importance export for Power BI
-├── Model_Feature_Importance.xlsx       # Excel workbook format of ML model drivers
-├── executive_powerbi_theme.json        # Custom Power BI design theme & palette
-└── .gitignore                          # Repository hygiene & exclusion rules
+├── HR_Executive_Dashboard.pbix       # Production Power BI Dashboard (3-page HD interactive app)
+├── performance_analytics.py         # Complete Python ML & Analytics pipeline
+├── enriched_hr_performance_data.csv # Enriched dataset (1,470 records with engineered features)
+└── README.md                        # Portfolio documentation & executive summary
 ```
+
+| Deliverable | Description |
+| :--- | :--- |
+| **Power BI Dashboard** (`HR_Executive_Dashboard.pbix`) | 3-page interactive `1920×1080` executive report with left-sidebar app rail (`01`, `02`, `03`), hover-glow KPI cards, burnout quadrant, and AI Decomposition Tree. |
+| **Python ML Pipeline** (`performance_analytics.py`) | Feature engineering (`CompaRatio`, `BurnoutIndex`, SHRM replacement cost), 5-fold out-of-fold flight-risk scoring (`RandomForestClassifier` + `LogisticRegression` baseline), and 9-Box Talent Matrix. |
+| **Enriched Dataset** (`enriched_hr_performance_data.csv`) | The clean enterprise dataset with all engineered features, risk scores, and compensation bands. |
+| **Executive Documentation** (`README.md`) | Complete business findings, DAX measures overview, methodology, and instructions for reproducing. |
 
 ---
 
@@ -49,7 +49,7 @@ Designed to diagnose enterprise attrition drivers, audit pay-for-performance mer
 
 ## 🖥️ Power BI Executive Dashboard Architecture
 
-The dashboard ([`HR_Executive_Dashboard_v4.pbix`](file:///d:/ME/port/hr/HR_Executive_Dashboard_v4.pbix)) is built on a **1920×1080 Full HD canvas** with a custom **Left App-Bar Navigation Rail** (`01`, `02`, `03`), interactive hover-glow overlays, and responsive cross-filtering.
+The dashboard ([`HR_Executive_Dashboard.pbix`](HR_Executive_Dashboard.pbix)) is built on a **1920×1080 Full HD canvas** with a custom **Left App-Bar Navigation Rail** (`01`, `02`, `03`), interactive hover-glow overlays, and responsive cross-filtering.
 
 ### Page 1: Executive KPI & Turnover Financial Exposure
 * **KPI Row**: Total Turnover Cost (\$12.33M), Regrettable Turnover Loss (\$6.46M), Active Headcount (1,233).
@@ -124,7 +124,7 @@ python performance_analytics.py
 ```
 
 ### Viewing the Dashboard
-Open [`HR_Executive_Dashboard_v4.pbix`](file:///d:/ME/port/hr/HR_Executive_Dashboard_v4.pbix) in **Power BI Desktop**. Navigate between pages using the custom sidebar app rail (`01`, `02`, `03`).
+Open [`HR_Executive_Dashboard.pbix`](HR_Executive_Dashboard.pbix) in **Power BI Desktop**. Navigate between pages using the custom sidebar app rail (`01`, `02`, `03`).
 
 ---
 
