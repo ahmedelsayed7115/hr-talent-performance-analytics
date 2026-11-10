@@ -113,7 +113,7 @@ The dashboard ([`HR_Executive_Dashboard_v4.pbix`](file:///d:/ME/port/hr/HR_Execu
 ### Quickstart
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/hr-talent-performance-analytics.git
+git clone https://github.com/ahmedelsayed7115/hr-talent-performance-analytics.git
 cd hr-talent-performance-analytics
 
 # Install Python dependencies
