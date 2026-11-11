@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Talent & Performance Intelligence | Ahmed Elsayed</title>
+<meta name="description" content="End-to-end People Analytics project: Python ML flight-risk model + 3-page Power BI executive dashboard quantifying $12.3M in turnover cost.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0B1220;
+    --bg-2: #0F1A2E;
+    --card: #131F36;
+    --border: #22324F;
+    --text: #E6ECF5;
+    --muted: #93A3BC;
+    --navy: #112D4E;
+    --blue: #3F72AF;
+    --ice: #DBE2EF;
+    --red: #EF4444;
+    --teal: #14B8A6;
+    --amber: #F59E0B;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11, 18, 32, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+  .brand-badge {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--blue), var(--navy));
+    display: grid; place-items: center; font-size: 13px; font-weight: 800;
+  }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 20px; border-radius: 10px; font-weight: 600; font-size: 14px;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 24px rgba(63,114,175,.35); }
+  .btn-primary:hover { background: #4F82BF; }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--blue); }
+
+  /* HERO */
+  .hero { padding: 96px 0 72px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -200px -100px auto auto;
+    width: 640px; height: 640px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(63,114,175,.28), transparent 65%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ice);
+    background: rgba(63,114,175,.15); border: 1px solid rgba(63,114,175,.4);
+    padding: 6px 12px; border-radius: 999px; margin-bottom: 22px;
+  }
+  h1 { font-size: clamp(36px, 5.2vw, 60px); line-height: 1.08; font-weight: 800; letter-spacing: -.02em; max-width: 880px; }
+  h1 .accent { background: linear-gradient(90deg, #7FA7DB, var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lead { font-size: 19px; color: var(--muted); max-width: 720px; margin: 22px 0 34px; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 34px; }
+  .tag { font-size: 12.5px; color: var(--muted); border: 1px solid var(--border); padding: 5px 11px; border-radius: 8px; background: var(--bg-2); }
+
+  /* KPI STRIP */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 64px; }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 22px; position: relative; overflow: hidden;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .kpi:hover { transform: translateY(-4px); border-color: var(--blue); }
+  .kpi::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--c, var(--blue)); }
+  .kpi .label { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .kpi .value { font-size: 32px; font-weight: 800; margin: 6px 0 2px; color: var(--c, var(--text)); }
+  .kpi .sub { font-size: 12.5px; color: var(--muted); }
+
+  /* SECTIONS */
+  section { padding: 88px 0; }
+  section.alt { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .section-head { max-width: 760px; margin-bottom: 44px; }
+  .section-head .kicker { font-size: 13px; font-weight: 700; color: var(--blue); letter-spacing: .1em; text-transform: uppercase; }
+  h2 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 800; letter-spacing: -.015em; margin: 8px 0 14px; line-height: 1.15; }
+  .section-head p { color: var(--muted); font-size: 17px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; }
+  .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .card .card-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
+  .chart-box { position: relative; height: 300px; }
+  .insight {
+    margin-top: 16px; font-size: 14px; color: var(--ice);
+    background: rgba(63,114,175,.1); border-left: 3px solid var(--blue);
+    padding: 10px 14px; border-radius: 0 8px 8px 0;
+  }
+  .insight.red { background: rgba(239,68,68,.08); border-color: var(--red); }
+  .insight.teal { background: rgba(20,184,166,.08); border-color: var(--teal); }
+
+  /* PROBLEM CARDS */
+  .q-card { position: relative; }
+  .q-num { font-size: 13px; font-weight: 800; color: var(--blue); margin-bottom: 10px; }
+  .q-card p { color: var(--muted); font-size: 14.5px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.highlight td { color: var(--red); font-weight: 700; }
+
+  /* 9-BOX */
+  .ninebox { display: grid; grid-template-columns: 120px repeat(3, 1fr); gap: 10px; }
+  .nb-label { display: flex; align-items: center; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .nb-head { text-align: center; font-size: 12.5px; color: var(--muted); font-weight: 600; padding-bottom: 4px; }
+  .nb-cell { border-radius: 12px; padding: 16px; border: 1px solid var(--border); transition: transform .2s; }
+  .nb-cell:hover { transform: scale(1.03); }
+  .nb-cell .n { font-size: 30px; font-weight: 800; }
+  .nb-cell .t { font-size: 13px; font-weight: 700; }
+  .nb-cell .e { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .nb-teal { background: rgba(20,184,166,.12); } .nb-teal .n { color: var(--teal); }
+  .nb-amber { background: rgba(245,158,11,.12); } .nb-amber .n { color: var(--amber); }
+  .nb-red { background: rgba(239,68,68,.14); } .nb-red .n { color: var(--red); }
+
+  /* PIPELINE */
+  .pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; position: relative; }
+  .step { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; }
+  .step .s-num { width: 30px; height: 30px; border-radius: 8px; background: var(--navy); border: 1px solid var(--blue); display: grid; place-items: center; font-size: 13px; font-weight: 800; margin-bottom: 12px; }
+  .step h4 { font-size: 15px; margin-bottom: 6px; }
+  .step p { font-size: 13px; color: var(--muted); }
+  .step:not(:last-child)::after { content: "→"; position: absolute; right: -13px; top: 50%; transform: translateY(-50%); color: var(--blue); font-weight: 800; }
+
+  /* GALLERY */
+  .gallery { display: grid; gap: 22px; }
+  .shot { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: var(--card); }
+  .shot img { width: 100%; display: block; }
+  .shot .cap { padding: 14px 18px; font-size: 14px; color: var(--muted); }
+  .shot .cap b { color: var(--text); }
+
+  /* RECS */
+  .rec { display: grid; grid-template-columns: 56px 1fr auto; gap: 18px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--border); }
+  .rec:last-child { border-bottom: none; }
+  .rec .p { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; background: var(--navy); border: 1px solid var(--blue); }
+  .rec h4 { font-size: 16px; margin-bottom: 3px; }
+  .rec p { font-size: 14px; color: var(--muted); }
+  .rec .roi { text-align: right; font-weight: 800; color: var(--teal); white-space: nowrap; }
+  .rec .roi small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; }
+
+  /* STACK */
+  .stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stack .card h3 { font-size: 15px; margin-bottom: 10px; }
+  .stack ul { list-style: none; font-size: 14px; color: var(--muted); }
+  .stack li { padding: 3px 0; }
+  .stack li::before { content: "▸ "; color: var(--blue); }
+
+  /* CTA */
+  .cta { text-align: center; }
+  .cta-box { background: linear-gradient(135deg, var(--navy), #1C3D66); border: 1px solid var(--blue); border-radius: 24px; padding: 60px 30px; }
+  .cta-box p { color: var(--ice); max-width: 600px; margin: 0 auto 30px; }
+  .cta-box .hero-actions { justify-content: center; }
+
+  footer { padding: 34px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 13.5px; }
+  footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  /* REVEAL ANIMATION */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .kpis, .stack { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .pipeline { grid-template-columns: 1fr; }
+    .step:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -18px; transform: translateX(50%); }
+    .nav-links { display: none; }
+    .ninebox { grid-template-columns: 80px repeat(3, 1fr); }
+    .rec { grid-template-columns: 46px 1fr; }
+    .rec .roi { grid-column: 2; text-align: left; }
+  }
+  @media (max-width: 560px) {
+    .kpis, .stack { grid-template-columns: 1fr; }
+    .nb-cell .n { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#" class="brand"><span class="brand-badge">HR</span> Talent Intelligence</a>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#turnover">Turnover</a>
+      <a href="#pay">Pay Audit</a>
+      <a href="#risk">Flight Risk</a>
+      <a href="#method">Method</a>
+      <a href="#actions">Actions</a>
+    </div>
+    <a class="btn btn-primary" href="https://github.com/ahmedelsayed7115/hr-talent-performance-analytics" target="_blank" rel="noopener">View on GitHub</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow">People Analytics · Machine Learning · Power BI</span>
+    <h1>Turning <span class="accent">$12.3M in turnover cost</span> into a retention strategy.</h1>
+    <p class="lead">An end-to-end analytics project that audits pay-for-performance, prices the true cost of losing talent, and predicts who is likely to leave next, delivered as a Python ML pipeline and a 3-page executive Power BI dashboard.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#turnover">Explore the findings ↓</a>
+      <a class="btn btn-ghost" href="https://github.com/ahmedelsayed7115/hr-talent-performance-analytics/raw/main/HR_Executive_Dashboard.pbix">Download .pbix</a>
+    </div>
+    <div class="tags">
+      <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">scikit-learn</span>
+      <span class="tag">Power BI</span><span class="tag">DAX</span><span class="tag">Power Query</span>
+      <span class="tag">Random Forest</span><span class="tag">Cross-Validation</span><span class="tag">Git</span>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi reveal" style="--c: var(--red)">
+        <div class="label">Total Turnover Cost</div>
+        <div class="value" data-count="12.33" data-prefix="$" data-suffix="M" data-dec="2">$0</div>
+        <div class="sub">237 exits · 16.12% attrition</div>
+      </div>
+      <div class="kpi reveal" style="--c: var(--amber)">
+        <div class="label">Regrettable Loss</div>
+        <div class="value" data-count="52.4" data-suffix="%" data-dec="1">0%</div>
+        <div class="sub">$6.46M from 87 key-talent exits</div>
+      </div>
+      <div class="kpi reveal" style="--c: var(--blue)">
+        <div class="label">Underpaid Top Performers</div>
+        <div class="value" data-count="30" data-dec="0">0</div>
+        <div class="sub">25.5% below peer median pay</div>
+      </div>
+      <div class="kpi reveal" style="--c: var(--teal)">
+        <div class="label">Recalibration ROI</div>
+        <div class="value" data-count="3.93" data-suffix="×" data-dec="2">0×</div>
+        <div class="sub">$401K protects $1.58M</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section id="problem" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">The Business Problem</span>
+      <h2>Three questions leadership couldn't answer</h2>
+      <p>The organization of 1,470 employees had above-benchmark attrition but no view of what it cost, whether pay rewarded performance, or who would leave next.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card q-card reveal">
+        <div class="q-num">01 · COST</div>
+        <h3>What is turnover really costing us?</h3>
+        <p>Headcount reports showed 237 exits but not the dollar impact, or which losses actually hurt.</p>
+      </div>
+      <div class="card q-card reveal">
+        <div class="q-num">02 · FAIRNESS</div>
+        <h3>Do we actually pay for performance?</h3>
+        <p>Top performers got bigger raises, yet they left just as often. Something in the pay structure was broken.</p>
+      </div>
+      <div class="card q-card reveal">
+        <div class="q-num">03 · RISK</div>
+        <h3>Who is about to leave?</h3>
+        <p>HR reacted to resignations after the fact. They needed a ranked list of at-risk talent to act on now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLAR 1: TURNOVER -->
+<section id="turnover">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Dashboard Page 1 · Turnover Economics</span>
+      <h2>Over half the cost comes from people we wanted to keep</h2>
+      <p>Each exit was priced using SHRM replacement multipliers (0.75× to 1.25× annual salary). Regrettable exits cost <b>$74K</b> each, nearly 1.9× a standard exit.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>Turnover Cost by Job Role</h3>
+        <div class="card-sub">Total replacement cost of departed employees</div>
+        <div class="chart-box"><canvas id="roleChart"></canvas></div>
+        <div class="insight red">Sales Executives alone account for <b>$4.63M (37.5%)</b> of all turnover cost.</div>
+      </div>
+      <div class="card reveal">
+        <h3>Regrettable vs. Standard Turnover</h3>
+        <div class="card-sub">Share of $12.33M replacement cost</div>
+        <div class="chart-box"><canvas id="regretChart"></canvas></div>
+        <div class="insight">36.7% of exits drive <b>52.4%</b> of the financial loss.</div>
+      </div>
+      <div class="card reveal">
+        <h3>Attrition Rate: Overtime vs. No Overtime</h3>
+        <div class="card-sub">By department</div>
+        <div class="chart-box"><canvas id="otChart"></canvas></div>
+        <div class="insight red">Overtime workers quit at <b>30.5%</b> vs. 10.4%, a 2.9× multiplier.</div>
+      </div>
+      <div class="card reveal">
+        <h3>The Early-Career Retention Cliff</h3>
+        <div class="card-sub">Attrition rate by tenure band</div>
+        <div class="chart-box"><canvas id="tenureChart"></canvas></div>
+        <div class="insight">43% of all exits happen in the first 2 years (<b>29.8%</b> attrition).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLAR 2: PAY -->
+<section id="pay" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Dashboard Page 2 · Pay-for-Performance Audit</span>
+      <h2>The "Merit Hike Mirage"</h2>
+      <p>Top performers receive bigger raises, but those raises land on compressed salaries. Within the same role and level, they earn no premium at all, and they leave at the same rate.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>Rating 3 vs. Rating 4: Side by Side</h3>
+        <div class="card-sub">Core contributors vs. outstanding performers</div>
+        <table>
+          <thead><tr><th>Metric</th><th class="num">Rating 3</th><th class="num">Rating 4</th></tr></thead>
+          <tbody>
+            <tr><td>Headcount</td><td class="num">1,244</td><td class="num">226</td></tr>
+            <tr><td>Avg salary hike</td><td class="num">14.00%</td><td class="num">21.85%</td></tr>
+            <tr><td>Median monthly pay</td><td class="num">$4,966</td><td class="num">$4,777</td></tr>
+            <tr><td>Compa-ratio (role & level)</td><td class="num">1.03</td><td class="num">1.01</td></tr>
+            <tr><td>Stock option level</td><td class="num">0.79</td><td class="num">0.80</td></tr>
+            <tr class="highlight"><td>Attrition rate</td><td class="num">16.08%</td><td class="num">16.37%</td></tr>
+          </tbody>
+        </table>
+        <div class="insight red">+7.85 pts more raise, but <b>zero retention advantage</b>.</div>
+      </div>
+      <div class="card reveal">
+        <h3>Recalibration Budget by Department</h3>
+        <div class="card-sub">Annual cost to lift 30 underpaid top performers to 1.00 compa-ratio</div>
+        <div class="chart-box"><canvas id="recalChart"></canvas></div>
+        <div class="insight teal"><b>$400,968/yr</b> protects <b>$1,577,340</b> in replacement exposure: a 3.93× return.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLAR 3: RISK -->
+<section id="risk">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Dashboard Page 3 · Predictive Flight Risk</span>
+      <h2>From reacting to resignations to predicting them</h2>
+      <p>A Random Forest model scores every employee's probability of leaving, using 5-fold out-of-fold cross-validation so no one is scored by a model that saw their outcome.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card reveal">
+        <h3>Top 10 Drivers of Attrition</h3>
+        <div class="card-sub">Held-out permutation importance · ROC-AUC 0.814</div>
+        <div class="chart-box" style="height: 360px"><canvas id="featChart"></canvas></div>
+        <div class="insight">Burnout, not pay alone, is the #1 predictor of who leaves.</div>
+      </div>
+      <div class="card reveal">
+        <h3>9-Box Talent & Retention Matrix</h3>
+        <div class="card-sub">1,233 active employees · performance × predicted risk</div>
+        <div class="ninebox">
+          <div></div>
+          <div class="nb-head">Low Risk</div>
+          <div class="nb-head">Moderate</div>
+          <div class="nb-head">High / Critical</div>
+
+          <div class="nb-label">Rating 4<br>Top</div>
+          <div class="nb-cell nb-teal"><div class="n">174</div><div class="t">Future Leaders</div><div class="e">Fast-track</div></div>
+          <div class="nb-cell nb-amber"><div class="n">14</div><div class="t">Watchlist</div><div class="e">$669K exposure</div></div>
+          <div class="nb-cell nb-red"><div class="n">1</div><div class="t">Critical Target</div><div class="e">$15.8K exposure</div></div>
+
+          <div class="nb-label">Rating 3<br>Core</div>
+          <div class="nb-cell nb-teal"><div class="n">951</div><div class="t">Bedrock</div><div class="e">Retain & reward</div></div>
+          <div class="nb-cell nb-amber"><div class="n">84</div><div class="t">Steady</div><div class="e">Engagement focus</div></div>
+          <div class="nb-cell nb-red"><div class="n">9</div><div class="t">Burnout Risk</div><div class="e">Workload relief</div></div>
+        </div>
+        <div class="insight red" style="margin-top: 20px"><b>15 top performers</b> are at risk right now, representing <b>$684,780</b> in exposure.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD SCREENSHOTS (auto-hides if images are not added yet) -->
+<section id="dashboard" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">The Deliverable</span>
+      <h2>A 3-page executive Power BI app</h2>
+      <p>Full-HD canvas, custom sidebar navigation, hover-animated KPI cards, a burnout risk quadrant and an AI decomposition tree for root-cause drilldown.</p>
+    </div>
+    <div class="gallery">
+      <div class="shot reveal"><img src="assets/page1.png" alt="Page 1: Executive turnover overview" onerror="this.closest('.shot').remove()"><div class="cap"><b>Page 1</b> · Executive Workforce & Turnover Exposure</div></div>
+      <div class="shot reveal"><img src="assets/page2.png" alt="Page 2: Pay-for-performance audit" onerror="this.closest('.shot').remove()"><div class="cap"><b>Page 2</b> · Pay-for-Performance & Meritocracy Audit</div></div>
+      <div class="shot reveal"><img src="assets/page3.png" alt="Page 3: Flight-risk intelligence" onerror="this.closest('.shot').remove()"><div class="cap"><b>Page 3</b> · Talent Retention & Flight-Risk Intelligence</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- METHOD -->
+<section id="method">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">How It Was Built</span>
+      <h2>From raw HR data to executive decisions</h2>
+    </div>
+    <div class="pipeline reveal">
+      <div class="step"><div class="s-num">1</div><h4>Ingest</h4><p>1,470 employee records, 35 HR attributes.</p></div>
+      <div class="step"><div class="s-num">2</div><h4>Engineer</h4><p>Compa-ratio, Burnout Index, SHRM replacement cost, stagnation flags.</p></div>
+      <div class="step"><div class="s-num">3</div><h4>Model</h4><p>Random Forest vs. Logistic Regression, 5-fold out-of-fold scoring.</p></div>
+      <div class="step"><div class="s-num">4</div><h4>Segment</h4><p>9-box matrix of performance × predicted flight risk.</p></div>
+      <div class="step"><div class="s-num">5</div><h4>Visualize</h4><p>DAX measures and a 3-page interactive Power BI report.</p></div>
+    </div>
+
+    <div class="stack" style="margin-top: 40px">
+      <div class="card reveal"><h3>Python & ML</h3><ul><li>pandas, NumPy</li><li>scikit-learn</li><li>Random Forest</li><li>Permutation importance</li></ul></div>
+      <div class="card reveal"><h3>Power BI</h3><ul><li>DAX measures</li><li>Power Query</li><li>Decomposition tree</li><li>Custom navigation</li></ul></div>
+      <div class="card reveal"><h3>HR Analytics</h3><ul><li>Compa-ratio analysis</li><li>SHRM cost modeling</li><li>9-box talent matrix</li><li>Attrition economics</li></ul></div>
+      <div class="card reveal"><h3>Validation</h3><ul><li>Stratified K-Fold CV</li><li>ROC-AUC 0.814</li><li>Baseline comparison</li><li>Leak-free scoring</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIONS -->
+<section id="actions" class="alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Recommendations</span>
+      <h2>Five actions, each tied to a number</h2>
+    </div>
+    <div class="card reveal">
+      <div class="rec"><div class="p">1</div><div><h4>Off-cycle pay recalibration</h4><p>Lift 30 underpaid top performers to peer-median pay.</p></div><div class="roi">3.93× ROI<small>$401K protects $1.58M</small></div></div>
+      <div class="rec"><div class="p">2</div><div><h4>Stay interventions for at-risk talent</h4><p>Target the 15 top performers in the Critical and Watchlist boxes within 30 days.</p></div><div class="roi">$685K<small>exposure protected</small></div></div>
+      <div class="rec"><div class="p">3</div><div><h4>Overtime circuit breakers</h4><p>Cap sustained overtime in Sales (37.5% attrition) and R&D (27.3%).</p></div><div class="roi">2.9×<small>risk multiplier removed</small></div></div>
+      <div class="rec"><div class="p">4</div><div><h4>First-24-month onboarding guardrails</h4><p>Structured 90/180/365-day check-ins for early-tenure employees.</p></div><div class="roi">$3.58M<small>early-exit cost pool</small></div></div>
+      <div class="rec"><div class="p">5</div><div><h4>Five-tier performance ratings</h4><p>Replace the compressed 3-or-4 scale so pay can actually differentiate.</p></div><div class="roi">100%<small>rated 3 or 4 today</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-box reveal">
+      <h2>Explore the full project</h2>
+      <p>The Python pipeline, enriched dataset and Power BI file are all open on GitHub.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://github.com/ahmedelsayed7115/hr-talent-performance-analytics" target="_blank" rel="noopener">View Repository</a>
+        <a class="btn btn-ghost" href="https://github.com/ahmedelsayed7115/hr-talent-performance-analytics/blob/main/performance_analytics.py" target="_blank" rel="noopener">Read the Code</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>© 2026 Ahmed Elsayed · HR Talent & Performance Intelligence</span>
+    <span>Data: IBM HR Analytics benchmark dataset (1,470 records)</span>
+  </div>
+</footer>
+
+<script>
+  // ---------- Reveal on scroll ----------
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---------- Animated KPI counters ----------
+  function animateCount(el) {
+    const target = parseFloat(el.dataset.count);
+    const dec = parseInt(el.dataset.dec || 0);
+    const pre = el.dataset.prefix || '';
+    const suf = el.dataset.suffix || '';
+    const dur = 1400;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + (target * eased).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const kpiObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateCount(e.target); kpiObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => kpiObserver.observe(el));
+
+  // ---------- Charts ----------
+  Chart.defaults.color = '#93A3BC';
+  Chart.defaults.font.family = "'Inter', 'Segoe UI', sans-serif";
+  Chart.defaults.borderColor = 'rgba(147,163,188,0.12)';
+  Chart.defaults.plugins.legend.labels.boxWidth = 12;
+
+  const C = { blue: '#3F72AF', navy: '#1E4A7A', red: '#EF4444', teal: '#14B8A6', amber: '#F59E0B', slate: '#64748B' };
+  const money = v => '$' + (v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : (v / 1e3).toFixed(0) + 'K');
+
+  // Lazy-create charts when scrolled into view so the animation is visible
+  const chartFactories = {
+    roleChart: (ctx) => new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Sales Executive', 'Lab Technician', 'Research Scientist', 'Manager', 'Healthcare Rep', 'Mfg Director', 'Sales Rep', 'Human Resources', 'Research Director'],
+        datasets: [{
+          data: [4626324, 1889403, 1370586, 1007844, 915636, 807858, 769206, 475035, 465492],
+          backgroundColor: (c) => c.dataIndex === 0 ? C.red : C.blue,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y', maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => money(c.raw) } } },
+        scales: { x: { ticks: { callback: money } }, y: { grid: { display: false } } }
+      }
+    }),
+    regretChart: (ctx) => new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Regrettable: Top Performer', 'Regrettable: Core Talent', 'Standard Turnover'],
+        datasets: [{ data: [2750385, 3708564, 5868435], backgroundColor: [C.red, C.amber, C.slate], borderWidth: 0, hoverOffset: 10 }]
+      },
+      options: {
+        maintainAspectRatio: false, cutout: '64%',
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: { callbacks: { label: c => c.label + ': ' + money(c.raw) + ' (' + (c.raw / 12327384 * 100).toFixed(1) + '%)' } }
+        }
+      }
+    }),
+    otChart: (ctx) => new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Sales', 'R&D', 'Human Resources'],
+        datasets: [
+          { label: 'Overtime', data: [37.5, 27.31, 29.41], backgroundColor: C.red, borderRadius: 6 },
+          { label: 'No Overtime', data: [13.84, 8.55, 15.22], backgroundColor: C.teal, borderRadius: 6 }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.raw + '%' } } },
+        scales: { y: { ticks: { callback: v => v + '%' } }, x: { grid: { display: false } } }
+      }
+    }),
+    tenureChart: (ctx) => {
+      const g = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+      g.addColorStop(0, 'rgba(20,184,166,0.35)');
+      g.addColorStop(1, 'rgba(20,184,166,0)');
+      return new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['0–2 yrs', '3–5 yrs', '6–10 yrs', '11+ yrs'],
+          datasets: [{ data: [29.82, 13.82, 12.28, 8.13], borderColor: C.teal, backgroundColor: g, fill: true, tension: 0.4, pointRadius: 6, pointBackgroundColor: C.blue, borderWidth: 3 }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + '% attrition' } } },
+          scales: { y: { beginAtZero: true, ticks: { callback: v => v + '%' } }, x: { grid: { display: false } } }
+        }
+      });
+    },
+    recalChart: (ctx) => new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['R&D (20 people)', 'Sales (7 people)', 'HR (3 people)'],
+        datasets: [
+          { label: 'Annual recalibration cost', data: [255324, 101304, 44340], backgroundColor: C.amber, borderRadius: 6 },
+          { label: 'Replacement exposure protected', data: [1038960, 373815, 164565], backgroundColor: C.teal, borderRadius: 6 }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + money(c.raw) } } },
+        scales: { y: { ticks: { callback: money } }, x: { grid: { display: false } } }
+      }
+    }),
+    featChart: (ctx) => new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Burnout Index', 'Monthly Income', 'Total Working Years', 'Age', 'Years at Company', 'Overtime', 'Compa-Ratio', 'Years w/ Manager', 'Distance from Home', 'Companies Worked'],
+        datasets: [{
+          data: [11.39, 9.20, 8.71, 7.36, 5.34, 4.63, 4.57, 3.60, 3.50, 3.26],
+          backgroundColor: (c) => c.dataIndex === 0 ? C.red : C.blue,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y', maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + '% importance' } } },
+        scales: { x: { ticks: { callback: v => v + '%' } }, y: { grid: { display: false } } }
+      }
+    })
+  };
+
+  const chartObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        chartFactories[e.target.id](e.target);
+        chartObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  Object.keys(chartFactories).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) chartObserver.observe(el);
+  });
+</script>
+</body>
+</html>
+
